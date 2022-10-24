@@ -1,17 +1,15 @@
 import * as React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createBottomTabNavigator} from "@react-navigation/bottom-tabs";
-import {Button, StyleSheet, Text} from "react-native";
+import {Button, StyleSheet} from "react-native";
 import Home from "./Home";
 import Publication from "./Publication";
-import Establishment from "./Establishment";
+import Establishment from "./establishment/Establishment";
 import Profile from "./Profile";
-import {Ionicons} from "@expo/vector-icons";
 import PublicationList from "./Publication-list";
-import { Icon } from '@rneui/themed';
-import {white} from "react-native-paper/lib/typescript/styles/colors";
-import MyTabBar from "../components/MyTabBar";
-import { getHeaderTitle } from '@react-navigation/elements';
+import {Icon} from '@rneui/themed';
+import {createNativeStackNavigator} from "react-native-screens/native-stack";
+import CreateEstablishment from "./establishment/Create-establishment";
 
 interface Props {
     name: string;
@@ -32,7 +30,7 @@ class Core extends React.Component<Props, States> {
         }
     }
 
-    myTabBar(){
+    myTabBar() {
         return (
             <Button
                 title="Go somewhere"
@@ -55,27 +53,27 @@ class Core extends React.Component<Props, States> {
                                     iconName = focused
                                         ? 'home'
                                         : 'home-outline';
-                                    return <Icon name={iconName} type='ionicon' color='#000000' />
+                                    return <Icon name={iconName} type='ionicon' color='#000000'/>
                                 case 'Publication':
                                     iconName = focused
                                         ? 'add-circle'
                                         : 'add-circle-outline';
-                                    return <Icon size={50} iconStyle={styles.addPublicationIcon} name={iconName} type='ionicon' />
+                                    return <Icon size={50} iconStyle={styles.addPublicationIcon} name={iconName} type='ionicon'/>
                                 case 'Publication-list':
                                     iconName = focused
                                         ? 'list'
                                         : 'list-outline';
-                                    return <Icon name={iconName} type='ionicon' color='#000000' />
+                                    return <Icon name={iconName} type='ionicon' color='#000000'/>
                                 case 'Establishment':
                                     iconName = focused
                                         ? 'restaurant'
                                         : 'restaurant-outline';
-                                    return <Icon name={iconName} type='ionicon' color='#000000' />
+                                    return <Icon name={iconName} type='ionicon' color='#000000'/>
                                 case 'Profile':
                                     iconName = focused
                                         ? 'person'
                                         : 'person-outline';
-                                    return <Icon name={iconName} type='ionicon' color='#000000' />
+                                    return <Icon name={iconName} type='ionicon' color='#000000'/>
                             }
 
                         },
@@ -91,8 +89,8 @@ class Core extends React.Component<Props, States> {
                     <Tab.Screen name="Home" component={Home}/>
                     <Tab.Screen name="Publication-list" component={PublicationList}/>
                     <Tab.Screen name="Publication" component={Publication}/>
-                    <Tab.Screen name="Establishment" component={Establishment}/>
-                    <Tab.Screen name="Profile" component={Profile}/>
+                    <Tab.Screen name="Establishment" component={(Establishment)}/>
+                    <Tab.Screen name="Profile" component={Profile} />
                 </Tab.Navigator>
             </NavigationContainer>
         )

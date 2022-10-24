@@ -1,9 +1,15 @@
 import {StyleSheet, View} from 'react-native';
 import Core from "./src/pages/Core";
+import { mapping, light as lightTheme } from '@eva-design/eva';
+import {ApplicationProvider} from "@ui-kitten/components";
 
 export default function App() {
     return (
-        <Core name={'test'}/>
+        <ApplicationProvider
+            mapping={mapping}
+            theme={lightTheme}>
+            <Core style={{flex: 1}} name={'test'}/>
+        </ApplicationProvider>
     );
 }
 

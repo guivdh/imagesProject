@@ -1,5 +1,5 @@
 import * as React from "react";
-import {Button, Image, StyleSheet, Text, View} from "react-native";
+import {Button, Image, View} from "react-native";
 import {getEstablishmentsAPI} from "../services/Establishment.service";
 import {TextInput} from "@react-native-material/core";
 import * as ImagePicker from "expo-image-picker";
@@ -38,17 +38,17 @@ class Publication extends React.Component<Props, States> {
     render() {
 
         const pickImage = async () => {
-            let result = await  ImagePicker.launchImageLibraryAsync({
+            let result = await ImagePicker.launchImageLibraryAsync({
                 mediaTypes: ImagePicker.MediaTypeOptions.All,
                 aspect: [4, 3],
                 quality: 1
             });
-            if(!result.cancelled) {
+            if (!result.cancelled) {
                 this.setState({
-                   publication: {
-                       ...this.state.publication,
-                       image: result.uri
-                   }
+                    publication: {
+                        ...this.state.publication,
+                        image: result.uri
+                    }
                 })
             }
         }
@@ -57,9 +57,9 @@ class Publication extends React.Component<Props, States> {
 
         return (
             <View>
-                <TextInput label="Label" style={{ margin: 16 }} />
-                <Button title="Pick an image from gallery" onPress={pickImage} />
-                {this.state.publication.image && <Image source={{uri: this.state.publication.image}} style={{width: 200, height: 200}} />}
+                <TextInput label="Label" style={{margin: 16}}/>
+                <Button title="Pick an image from gallery" onPress={pickImage}/>
+                {this.state.publication.image && <Image source={{uri: this.state.publication.image}} style={{width: 200, height: 200}}/>}
             </View>
         )
     }

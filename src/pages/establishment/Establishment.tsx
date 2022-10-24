@@ -2,8 +2,9 @@ import * as React from "react";
 import {Button, Image, Modal, ScrollView, StyleSheet, Text, View} from "react-native";
 import {ListItem, TextInput} from "@react-native-material/core";
 import * as ImagePicker from "expo-image-picker";
-import {getCountriesFromApi} from "../services/Country.service";
-import {addEstablishmentAPI} from "../services/Establishment.service";
+import {getCountriesFromApi} from "../../services/Country.service";
+import {addEstablishmentAPI} from "../../services/Establishment.service";
+import CreateEstablishment from "./Create-establishment";
 
 interface Props {
 }
@@ -87,6 +88,14 @@ class Establishment extends React.Component<Props, States> {
 
         return (
             <View style={styles.container}>
+                {
+                    !this.state.displayAddEstModal ? <Button title='Add new establishment' onPress={() => {
+                        this.setState({displayAddEstModal: true})
+                    }}
+                    /> : <CreateEstablishment backToList={() => this.setState({displayAddEstModal: false})} />
+                }
+            </View>
+            /*<View style={styles.container}>
                 <Button title='Add new establishment' onPress={() => {
                     this.setState({displayAddEstModal: true})
                 }}
@@ -190,7 +199,7 @@ class Establishment extends React.Component<Props, States> {
                         </View>
                     </View>
                 </Modal>
-            </View>
+            </View>*/
         )
     }
 }

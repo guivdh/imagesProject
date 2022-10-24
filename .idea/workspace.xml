@@ -2,15 +2,19 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="38e31b97-7934-406a-a070-c841035f6c4f" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/services/Country.service.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/services/Establishment.service.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/services/Publication.service.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/pages/establishment/Create-establishment.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/App.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/babel.config.js" beforeDir="false" afterPath="$PROJECT_DIR$/babel.config.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/Establishment.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Establishment.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/Publication-list.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Publication-list.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/Core.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Core.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/Establishment.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/establishment/Establishment.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/pages/Publication.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Publication.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/services/Country.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/services/Country.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/services/Establishment.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/services/Establishment.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/services/Publication.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/services/Publication.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tsconfig.json" beforeDir="false" afterPath="$PROJECT_DIR$/tsconfig.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -29,20 +33,21 @@
     <option name="showLibraryContents" value="true" />
     <option name="sortByType" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/guillaume/Documents/programmation/imagesProject/imagesProject&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
-    &quot;ts.external.directory.path&quot;: &quot;C:\\Users\\guillaume\\Documents\\programmation\\imagesProject\\imagesProject\\node_modules\\typescript\\lib&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "last_opened_file_path": "C:/Users/guillaume/Documents/programmation/imagesProject/imagesProject",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "preferences.pluginManager",
+    "ts.external.directory.path": "C:\\Users\\guillaume\\Documents\\privé\\imagesProject\\node_modules\\typescript\\lib",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\guillaume\Documents\privé\imagesProject\src\pages\establishment" />
       <recent name="C:\Users\guillaume\Documents\privé\imagesProject\src" />
       <recent name="C:\Users\guillaume\Documents\privé\imagesProject" />
       <recent name="C:\Users\guillaume\Documents\privé\imagesProject\src\app" />
@@ -61,6 +66,7 @@
       <workItem from="1666515620367" duration="4650000" />
       <workItem from="1666544228825" duration="3375000" />
       <workItem from="1666547677721" duration="3588000" />
+      <workItem from="1666603275306" duration="11103000" />
     </task>
     <servers />
   </component>
