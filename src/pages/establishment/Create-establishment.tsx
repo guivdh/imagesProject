@@ -1,12 +1,11 @@
 import * as React from "react";
 import {Button, Image, Modal, ScrollView, StyleSheet, Text, View} from "react-native";
 import {Divider, ListItem} from "@react-native-material/core";
-import {Input, Layout} from "@ui-kitten/components";
+import {Autocomplete, AutocompleteItem, Button as KittenButton, IndexPath, Input} from "@ui-kitten/components";
 import {getCountriesFromApi} from "../../services/Country.service";
 import {addEstablishmentAPI} from "../../services/Establishment.service";
 import * as ImagePicker from "expo-image-picker";
-import { Button as KittenButton, Icon } from '@ui-kitten/components';
-import {uploadImageAPI} from "../../services/Image.service";
+import {Icon} from '@rneui/themed';
 
 interface Props {
     backToList(): void
@@ -23,8 +22,9 @@ interface States {
         street: string,
         country: string
     }
-    selectedCountryLabel: string,
-    loading: boolean
+    selectedCountry: any,
+    loading: boolean,
+    selectedCountryLabel: string
 }
 
 class CreateEstablishment extends React.Component<Props, States> {
@@ -34,7 +34,7 @@ class CreateEstablishment extends React.Component<Props, States> {
             displayAddEstModal: false,
             displaySelectCountryModal: false,
             countriesList: [],
-            selectedCountryLabel: '',
+            selectedCountry: null,
             establishment: {
                 name: '',
                 description: '',
@@ -42,7 +42,8 @@ class CreateEstablishment extends React.Component<Props, States> {
                 street: '',
                 country: ''
             },
-            loading: false
+            loading: false,
+            selectedCountryLabel: ''
         }
 
         this.getCountries();
@@ -59,11 +60,10 @@ class CreateEstablishment extends React.Component<Props, States> {
     }
 
     private async addEstablishment(establishment: any) {
-        console.log('aa')
         await addEstablishmentAPI(establishment)
             .then((response) => response.json())
             .then((result) => {
-                if(result.id) {
+                if (result.id) {
                     this.props.backToList();
                     this.setState({
                         establishment: {
@@ -91,7 +91,6 @@ class CreateEstablishment extends React.Component<Props, States> {
                 quality: 1
             });
             if (!result.cancelled) {
-                console.log(result)
                 this.setState({
                     establishment: {
                         ...this.state.establishment,
@@ -102,24 +101,36 @@ class CreateEstablishment extends React.Component<Props, States> {
         }
 
         const checkIfFormComplete = () => {
-            if(!this.state.establishment.name) {
-                return false;
-            } else if (!this.state.establishment.description) {
-                return false;
-            } else if (!this.state.establishment.street) {
-                return false;
-            } else if (!this.state.establishment.country) {
-                return false;
-            } else if (!this.state.establishment.image) {
-                return false;
-            } else {
+            if (!this.state.establishment.name) {
                 return true;
+            } else if (!this.state.establishment.description) {
+                return true;
+            } else if (!this.state.establishment.street) {
+                return true;
+            } else if (!this.state.establishment.country) {
+                return true;
+            } else if (!this.state.establishment.image) {
+                return true;
+            } else {
+                return false;
             }
         }
 
         return (
             <View>
                 <ScrollView>
+
+
+                    <KittenButton style={styles.button} accessoryLeft={<Icon name='add-outline' type='ionicon' color='#000000'/>} status='primary' onPress={pickImage}>Select image</KittenButton>
+
+                    {
+                        this.state.establishment.image &&
+                        <View style={styles.imageContainer}>
+                            <Image source={{uri: this.state.establishment.image}} style={{width: 200, height: 200}}/>
+                        </View>
+                    }
+
+                    <Divider style={{margin: 10}}/>
 
                     <Input size='small' label="Nom" style={{margin: 5}} onChangeText={(v: string) => {
                         this.setState({
@@ -148,7 +159,6 @@ class CreateEstablishment extends React.Component<Props, States> {
                             }
                         });
                     }}/>
-
                     <Input size='small' disabled value={this.state.selectedCountryLabel} label="Country" style={{margin: 5}}/>
                     <KittenButton style={styles.button} size='small' onPress={() => {
                         this.setState({displaySelectCountryModal: true});
@@ -156,18 +166,7 @@ class CreateEstablishment extends React.Component<Props, States> {
 
                     <Divider style={{margin: 10}}/>
 
-                    <KittenButton style={styles.button} size='small' onPress={pickImage}>Pick an image from gallery</KittenButton>
-
-                    {
-                        this.state.establishment.image &&
-                        <View style={styles.imageContainer}>
-                             <Image source={{uri: this.state.establishment.image}} style={{width: 200, height: 200}}/>
-                        </View>
-                    }
-
-                    <Divider style={{margin: 10}}/>
-
-                    <KittenButton style={styles.button} status='success' onPress={() => this.addEstablishment(this.state.establishment)}>
+                    <KittenButton style={styles.button} disabled={checkIfFormComplete()} status='success' onPress={() => this.addEstablishment(this.state.establishment)}>
                         SAVE
                     </KittenButton>
                     <KittenButton style={styles.button} status='danger' onPress={() => {
@@ -222,8 +221,8 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     imageContainer: {
-      justifyContent: 'center',
-      alignItems: 'center',
+        justifyContent: 'center',
+        alignItems: 'center',
         margin: 10
     },
     separator: {
@@ -287,7 +286,10 @@ const styles = StyleSheet.create({
     modalText: {
         marginBottom: 15,
         textAlign: "center"
-    }
+    },
+    containerLayout: {
+        minHeight: 128,
+    },
 });
 
 export default (CreateEstablishment);

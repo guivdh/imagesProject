@@ -1,18 +1,20 @@
 import * as React from "react";
-import {Button, Image, Modal, ScrollView, StyleSheet, Text, View} from "react-native";
-import {ListItem, TextInput} from "@react-native-material/core";
-import * as ImagePicker from "expo-image-picker";
+import {Button, RefreshControl, ScrollView, StyleSheet, View} from "react-native";
 import {getCountriesFromApi} from "../../services/Country.service";
-import {addEstablishmentAPI, getEstablishmentsAPI} from "../../services/Establishment.service";
+import {getEstablishmentsAPI} from "../../services/Establishment.service";
 import CreateEstablishment from "./Create-establishment";
+import {Avatar, ListItem} from "@react-native-material/core";
 
 interface Props {
+    navigation: any,
+    route: any
 }
 
 interface States {
     displayAddEstModal: boolean,
     displaySelectCountryModal: boolean,
     countriesList: any[];
+    establishmentList: any[];
     establishment: {
         name: string,
         description: string,
@@ -21,7 +23,8 @@ interface States {
         country: string
     }
     selectedCountryLabel: string,
-    loading: boolean
+    loading: boolean,
+    refreshing: boolean
 }
 
 class Establishment extends React.Component<Props, States> {
@@ -31,6 +34,7 @@ class Establishment extends React.Component<Props, States> {
             displayAddEstModal: false,
             displaySelectCountryModal: false,
             countriesList: [],
+            establishmentList: [],
             selectedCountryLabel: '',
             establishment: {
                 name: '',
@@ -39,10 +43,12 @@ class Establishment extends React.Component<Props, States> {
                 address: '',
                 country: ''
             },
-            loading: false
+            loading: false,
+            refreshing: false
         }
 
         this.getCountries();
+        this.getEstablishments();
     }
 
     private async getCountries() {
@@ -60,156 +66,66 @@ class Establishment extends React.Component<Props, States> {
             .then(res => res.json())
             .then(json => {
                 this.setState({
-                    countriesList: json
+                    establishmentList: json,
+                    refreshing: false
                 })
             })
-    }
-
-    private async addEstablishment(establishment: any) {
-        return addEstablishmentAPI(establishment)
-            .then(res => {
-                console.log(res)
-            })
-
     }
 
     render() {
 
-        const Separator = () => (
-            <View style={styles.separator}/>
-        );
+        const { create } = this.props.route.params;
 
-
-        const pickImage = async () => {
-            let result = await ImagePicker.launchImageLibraryAsync({
-                mediaTypes: ImagePicker.MediaTypeOptions.All,
-                aspect: [4, 3],
-                quality: 1
-            });
-            if (!result.cancelled) {
-                this.setState({
-                    establishment: {
-                        ...this.state.establishment,
-                        image: result.uri
-                    }
-                })
-            }
-        }
+        let estList = (
+            <ScrollView
+                refreshControl={
+                    <RefreshControl
+                        refreshing={this.state.refreshing}
+                        onRefresh={() => {
+                            this.setState({
+                                refreshing: true
+                            });
+                            this.getEstablishments();
+                        }}
+                    />
+                }
+            >
+                {
+                    this.state.establishmentList.map((el, i) => {
+                        return (
+                            <ListItem key={i} title={el.name} leading={
+                                <Avatar
+                                    image={{uri: 'http://10.0.0.2:3000/' + el.image.path}}
+                                    size={32}
+                                />
+                            }/>
+                        )
+                    })
+                }
+            </ScrollView>
+        )
 
         return (
             <View style={styles.container}>
                 {
-                    !this.state.displayAddEstModal ? <Button title='Add new establishment' onPress={() => {
-                        this.setState({displayAddEstModal: true})
-                    }}
-                    /> : <CreateEstablishment backToList={() => this.setState({displayAddEstModal: false})} />
+                    !create ?
+                        <View style={styles.container}>
+                            <Button title='Add new establishment' onPress={() => {
+                                this.props.navigation.navigate('Establishment', {create: true})
+                            }}
+                            />
+                            {estList}
+                        </View> :
+                        <CreateEstablishment backToList={() => {
+                            this.props.navigation.setParams({create: false})
+                            this.setState({
+                                refreshing: true,
+                                displayAddEstModal: false
+                            });
+                            this.getEstablishments();
+                        }}/>
                 }
             </View>
-            /*<View style={styles.container}>
-                <Button title='Add new establishment' onPress={() => {
-                    this.setState({displayAddEstModal: true})
-                }}
-                />
-                <Modal
-                    animationType="slide"
-                    transparent={true}
-                    visible={this.state.displayAddEstModal}
-                    onRequestClose={() => {
-                        this.setState({displayAddEstModal: !this.state.displayAddEstModal});
-                    }}
-                >
-                    <View style={styles.centeredView}>
-                        <View style={styles.modalView}>
-                            <ScrollView>
-                                <TextInput label="Nom" style={{margin: 16}} onChangeText={(v: string) => {
-                                    this.setState({
-                                        establishment: {
-                                            ...this.state.establishment,
-                                            name: v
-                                        }
-                                    });
-                                }}/>
-                                <TextInput label="Description" style={{margin: 16}} onChangeText={(v: string) => {
-                                    this.setState({
-                                        establishment: {
-                                            ...this.state.establishment,
-                                            description: v
-                                        }
-                                    });
-                                }}/>
-
-                                <Separator/>
-
-                                <TextInput label="Address" style={{margin: 16}} onChangeText={(v: string) => {
-                                    this.setState({
-                                        establishment: {
-                                            ...this.state.establishment,
-                                            description: v
-                                        }
-                                    });
-                                }}/>
-
-                                {(!this.state.establishment.country) ? <Button title="Select country" onPress={() => {
-                                    this.setState({displaySelectCountryModal: true});
-                                }}/> : <Text onPress={() => {this.setState({displaySelectCountryModal: true})}}>{this.state.selectedCountryLabel}</Text>}
-
-                                <Separator/>
-
-                                <Button title="Pick an image from gallery" onPress={pickImage}/>
-                                {this.state.establishment.image && <Image source={{uri: this.state.establishment.image}} style={{width: 200, height: 200}}/>}
-
-                                <Separator/>
-
-                                <Button title='Save' onPress={() => {
-                                    this.addEstablishment(this.state.establishment);
-                                }}/>
-                                <Separator />
-                                <Button title='Close' onPress={() => {
-                                    this.setState({
-                                        displayAddEstModal: !this.state.displayAddEstModal,
-                                        establishment: {
-                                            country: '',
-                                            address: '',
-                                            image: '',
-                                            description: '',
-                                            name: ''
-                                        }
-                                    });
-                                }}/>
-                            </ScrollView>
-                        </View>
-                    </View>
-                </Modal>
-                <Modal
-                    animationType="slide"
-                    transparent={true}
-                    visible={this.state.displaySelectCountryModal}
-                    onRequestClose={() => {
-                        this.setState({displaySelectCountryModal: !this.state.displaySelectCountryModal});
-                    }}
-                >
-                    <View style={styles.centeredView}>
-                        <View style={styles.modalCountriesView}>
-                            <Text>Select country</Text>
-                            {this.state.countriesList && this.state.countriesList.map((l, i) => (
-                                <ListItem key={l.id} title={l.label} onPress={() => {
-                                    this.setState({
-                                        establishment: {
-                                            ...this.state.establishment,
-                                            country: l.id
-                                        },
-                                        selectedCountryLabel: l.label,
-                                        displaySelectCountryModal: false
-                                    })
-                                }}/>
-                            ))}
-                            <Button title='Close' onPress={() => {
-                                this.setState({displaySelectCountryModal: !this.state.displaySelectCountryModal});
-                            }}/>
-                        </View>
-                    </View>
-                </Modal>
-            </View>*/
         )
     }
 }
@@ -218,6 +134,7 @@ class Establishment extends React.Component<Props, States> {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        flexGrow: 1
     },
     separator: {
         marginVertical: 8,
@@ -279,7 +196,13 @@ const styles = StyleSheet.create({
     modalText: {
         marginBottom: 15,
         textAlign: "center"
-    }
+    },
+    scrollView: {
+        flex: 1,
+        backgroundColor: 'pink',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
 });
 
 export default (Establishment);

@@ -89,7 +89,7 @@ class Core extends React.Component<Props, States> {
                     <Tab.Screen name="Home" component={Home}/>
                     <Tab.Screen name="Publication-list" component={PublicationList}/>
                     <Tab.Screen name="Publication" component={Publication}/>
-                    <Tab.Screen name="Establishment" component={(Establishment)}/>
+                    <Tab.Screen name="Establishment" component={(Establishment)} initialParams={{create: false}}/>
                     <Tab.Screen name="Profile" component={Profile} />
                 </Tab.Navigator>
             </NavigationContainer>
