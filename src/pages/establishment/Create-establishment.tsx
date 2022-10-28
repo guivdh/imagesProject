@@ -6,6 +6,7 @@ import {getCountriesFromApi} from "../../services/Country.service";
 import {addEstablishmentAPI} from "../../services/Establishment.service";
 import * as ImagePicker from "expo-image-picker";
 import { Button as KittenButton, Icon } from '@ui-kitten/components';
+import {uploadImageAPI} from "../../services/Image.service";
 
 interface Props {
     backToList(): void
@@ -19,7 +20,7 @@ interface States {
         name: string,
         description: string,
         image: string,
-        address: string,
+        street: string,
         country: string
     }
     selectedCountryLabel: string,
@@ -38,7 +39,7 @@ class CreateEstablishment extends React.Component<Props, States> {
                 name: '',
                 description: '',
                 image: '',
-                address: '',
+                street: '',
                 country: ''
             },
             loading: false
@@ -58,14 +59,26 @@ class CreateEstablishment extends React.Component<Props, States> {
     }
 
     private async addEstablishment(establishment: any) {
-        addEstablishmentAPI(establishment).then((res => {
-            if(res) {
-                //console.log(res)
-            }
-        }))
-            .catch(e => {
-                console.log(e)
+        console.log('aa')
+        await addEstablishmentAPI(establishment)
+            .then((response) => response.json())
+            .then((result) => {
+                if(result.id) {
+                    this.props.backToList();
+                    this.setState({
+                        establishment: {
+                            country: '',
+                            street: '',
+                            image: '',
+                            description: '',
+                            name: ''
+                        }
+                    });
+                }
             })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
 
     }
 
@@ -93,7 +106,7 @@ class CreateEstablishment extends React.Component<Props, States> {
                 return false;
             } else if (!this.state.establishment.description) {
                 return false;
-            } else if (!this.state.establishment.address) {
+            } else if (!this.state.establishment.street) {
                 return false;
             } else if (!this.state.establishment.country) {
                 return false;
@@ -127,11 +140,11 @@ class CreateEstablishment extends React.Component<Props, States> {
 
                     <Divider style={{margin: 10}}/>
 
-                    <Input size='small' label="Address" style={{margin: 5}} onChangeText={(v: string) => {
+                    <Input size='small' label="street" style={{margin: 5}} onChangeText={(v: string) => {
                         this.setState({
                             establishment: {
                                 ...this.state.establishment,
-                                description: v
+                                street: v
                             }
                         });
                     }}/>
@@ -162,7 +175,7 @@ class CreateEstablishment extends React.Component<Props, States> {
                         this.setState({
                             establishment: {
                                 country: '',
-                                address: '',
+                                street: '',
                                 image: '',
                                 description: '',
                                 name: ''

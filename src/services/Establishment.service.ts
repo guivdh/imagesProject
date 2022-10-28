@@ -1,21 +1,28 @@
 export const getEstablishmentsAPI = async () => {
-    return await fetch('http://10.0.0.2:3001/establishments');
+    return await fetch('http://10.0.0.2:3000/establishments');
 }
 export const addEstablishmentAPI = async (establishment: any) => {
-    const fileName = establishment.image.split('/').pop();
-    const fileType = fileName.split('.').pop();
-    const formData = new FormData();
-    formData.append('file', {
+    let body = new FormData();
+    body.append('establishment', {
         uri: establishment.image,
-        name: fileName,
-        type: `image/${fileType}`
+        name: 'photo.jpg',
+        type: 'image/png'
     });
-
-    return await fetch('http://10.0.0.2:3001/establishments/upload', {
-        method: 'POST',
-        body: formData,
-        headers: {
-            'Content-Type': 'multipart/form-data',
+    //Object.assign(body, establishment);
+    body.append('name', establishment.name);
+    body.append('description', establishment.description);
+    body.append('street', establishment.street);
+    body.append('country', establishment.country);
+    let jsonData = {
+        'file':{
+            uri: establishment.image,
+            name: 'photo.jpg',
+            type: 'image/png'
         },
+        'contentDisposition': establishment
+    }
+    return await fetch('http://10.0.0.2:3000/establishments/upload', {
+        method: 'POST',
+        body: body
     });
 }

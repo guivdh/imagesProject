@@ -3,7 +3,7 @@ import {Button, Image, Modal, ScrollView, StyleSheet, Text, View} from "react-na
 import {ListItem, TextInput} from "@react-native-material/core";
 import * as ImagePicker from "expo-image-picker";
 import {getCountriesFromApi} from "../../services/Country.service";
-import {addEstablishmentAPI} from "../../services/Establishment.service";
+import {addEstablishmentAPI, getEstablishmentsAPI} from "../../services/Establishment.service";
 import CreateEstablishment from "./Create-establishment";
 
 interface Props {
@@ -47,6 +47,16 @@ class Establishment extends React.Component<Props, States> {
 
     private async getCountries() {
         return getCountriesFromApi()
+            .then(res => res.json())
+            .then(json => {
+                this.setState({
+                    countriesList: json
+                })
+            })
+    }
+
+    private async getEstablishments() {
+        return getEstablishmentsAPI()
             .then(res => res.json())
             .then(json => {
                 this.setState({
