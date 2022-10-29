@@ -1,5 +1,5 @@
 import * as React from "react";
-import {Button, Text} from "react-native";
+import {Button} from "react-native";
 
 interface Props {
 }

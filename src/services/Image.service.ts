@@ -1,3 +1,5 @@
+import {ENV_API_URL} from "@env";
+
 export const uploadImageAPI = async (image: string) => {
     let body = new FormData();
     body.append('image', {
@@ -6,7 +8,7 @@ export const uploadImageAPI = async (image: string) => {
         type: 'image/png'
     });
 
-    return await fetch('http://10.0.0.2:3000/images/upload', {
+    return await fetch(ENV_API_URL + '/images/upload', {
         method: 'POST',
         body: body
     });

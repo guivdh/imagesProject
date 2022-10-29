@@ -1,3 +1,5 @@
+import {ENV_API_URL} from "@env";
+
 export const getPublicationsAPI = async () => {
-    return await fetch('http://10.0.0.2:3000/publications');
+    return await fetch(ENV_API_URL + '/publications');
 }

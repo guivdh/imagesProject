@@ -8,8 +8,6 @@ import Establishment from "./establishment/Establishment";
 import Profile from "./Profile";
 import PublicationList from "./Publication-list";
 import {Icon} from '@rneui/themed';
-import {createNativeStackNavigator} from "react-native-screens/native-stack";
-import CreateEstablishment from "./establishment/Create-establishment";
 
 interface Props {
     name: string;

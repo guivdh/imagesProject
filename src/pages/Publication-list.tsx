@@ -1,9 +1,7 @@
 import * as React from "react";
-import {Image, Text, View, StyleSheet} from "react-native";
-import {getEstablishmentsAPI} from "../services/Establishment.service";
+import {Image, StyleSheet, View} from "react-native";
 import {getPublicationsAPI} from "../services/Publication.service";
-import {Avatar, ListItem} from "@react-native-material/core";
-import * as ImagePicker from 'expo-image-picker';
+import {ListItem} from "@react-native-material/core";
 
 interface Props {
 }

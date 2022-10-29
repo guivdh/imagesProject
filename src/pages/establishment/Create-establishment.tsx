@@ -1,7 +1,7 @@
 import * as React from "react";
 import {Button, Image, Modal, ScrollView, StyleSheet, Text, View} from "react-native";
 import {Divider, ListItem} from "@react-native-material/core";
-import {Autocomplete, AutocompleteItem, Button as KittenButton, IndexPath, Input} from "@ui-kitten/components";
+import {Button as KittenButton, Input} from "@ui-kitten/components";
 import {getCountriesFromApi} from "../../services/Country.service";
 import {addEstablishmentAPI} from "../../services/Establishment.service";
 import * as ImagePicker from "expo-image-picker";
