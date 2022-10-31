@@ -2,23 +2,18 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="38e31b97-7934-406a-a070-c841035f6c4f" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.env" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/env.d.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.env" beforeDir="false" afterPath="$PROJECT_DIR$/.env" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/babel.config.js" beforeDir="false" afterPath="$PROJECT_DIR$/babel.config.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/env.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/env.d.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/MyTabBar.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/MyTabBar.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/pages/Core.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Core.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/pages/Publication-list.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Publication-list.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/pages/Publication.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Publication.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/establishment/Create-establishment.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/establishment/Create-establishment.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/pages/establishment/Establishment.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/establishment/Establishment.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/services/Country.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/services/Country.service.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/services/Establishment.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/services/Establishment.service.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/services/Image.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/services/Image.service.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/services/Publication.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/services/Publication.service.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tsconfig.json" beforeDir="false" afterPath="$PROJECT_DIR$/tsconfig.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -45,7 +40,7 @@
     "last_opened_file_path": "C:/Users/guillaume/Documents/programmation/imagesProject/imagesProject",
     "nodejs_package_manager_path": "npm",
     "settings.editor.selected.configurable": "preferences.keymap",
-    "ts.external.directory.path": "C:\\Users\\guillaume\\Documents\\programmation\\imagesProject\\imagesProject\\node_modules\\typescript\\lib",
+    "ts.external.directory.path": "C:\\Users\\guillaume\\Documents\\privé\\imagesProject\\node_modules\\typescript\\lib",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>

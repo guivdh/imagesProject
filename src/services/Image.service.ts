@@ -1,4 +1,4 @@
-import {ENV_API_URL} from "@env";
+import {REACT_APP_API_URL} from "@env";
 
 export const uploadImageAPI = async (image: string) => {
     let body = new FormData();
@@ -8,7 +8,7 @@ export const uploadImageAPI = async (image: string) => {
         type: 'image/png'
     });
 
-    return await fetch(ENV_API_URL + '/images/upload', {
+    return await fetch(REACT_APP_API_URL + '/images/upload', {
         method: 'POST',
         body: body
     });

@@ -1,15 +1,15 @@
-import {ENV_API_URL} from "@env"
+import {REACT_APP_API_URL} from "@env"
 
 export const getEstablishmentsAPI = async () => {
-    return await fetch(ENV_API_URL + '/establishments');
+    return await fetch(REACT_APP_API_URL + '/establishments');
 }
 
 export const getLightEstablishmentsAPI = async () => {
-    return await fetch(ENV_API_URL + '/establishments/light');
+    return await fetch(REACT_APP_API_URL + '/establishments/light');
 }
 
 export const getEstablishmentByIdAPI = async (id: string) => {
-    return await fetch(ENV_API_URL + '/establishments/' + id);
+    return await fetch(REACT_APP_API_URL + '/establishments/' + id);
 }
 export const addEstablishmentAPI = async (establishment: any) => {
     let body = new FormData();
@@ -31,7 +31,7 @@ export const addEstablishmentAPI = async (establishment: any) => {
         },
         'contentDisposition': establishment
     }
-    return await fetch(ENV_API_URL + '/establishments/upload', {
+    return await fetch(REACT_APP_API_URL + '/establishments/upload', {
         method: 'POST',
         body: body
     });

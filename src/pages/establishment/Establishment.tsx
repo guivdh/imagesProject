@@ -4,7 +4,7 @@ import {getCountriesFromApi} from "../../services/Country.service";
 import {getEstablishmentsAPI} from "../../services/Establishment.service";
 import CreateEstablishment from "./Create-establishment";
 import {Avatar, ListItem} from "@react-native-material/core";
-import {ENV_API_URL} from "@env";
+import {REACT_APP_API_URL} from "@env";
 
 interface Props {
     navigation: any,
@@ -96,7 +96,7 @@ class Establishment extends React.Component<Props, States> {
                         return (
                             <ListItem key={i} title={el.name} leading={
                                 <Avatar
-                                    image={{uri: ENV_API_URL + '/' + el.image.path}}
+                                    image={{uri: REACT_APP_API_URL + '/' + el.image.path}}
                                     size={32}
                                 />
                             }/>

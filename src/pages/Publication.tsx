@@ -1,13 +1,14 @@
 import * as React from "react";
-import {ActivityIndicator, Button, Image, Modal, ScrollView, StyleSheet, Text, View} from "react-native";
+import {ActivityIndicator, Image, Modal, ScrollView, StyleSheet, Text, TextInput, View} from "react-native";
 import {getEstablishmentByIdAPI, getLightEstablishmentsAPI} from "../services/Establishment.service";
-import {Divider, TextInput} from "@react-native-material/core";
+import {Divider} from "@react-native-material/core";
 import * as ImagePicker from "expo-image-picker";
-import {Icon, Slider} from "@rneui/base";
+import {Button, Icon, Slider} from "@rneui/base";
 import {AutocompleteDropdown} from "react-native-autocomplete-dropdown";
 import {Card} from "@rneui/themed";
-import {ENV_API_URL} from "@env";
-import {Button as KittenButton, Input, Tab, TabView} from "@ui-kitten/components";
+import {REACT_APP_API_URL} from "@env";
+import {Button as KittenButton, Input, Layout, Tab, TabView} from "@ui-kitten/components";
+import {addPublicationAPI} from "../services/Publication.service";
 
 interface Props {
     navigation: any,
@@ -62,6 +63,25 @@ class Publication extends React.Component<Props, States> {
             currentTabRating: 0,
             currentEstablishment: null
         }
+
+        this.props.navigation.addListener('blur', () => {
+            this.setState({
+                publication: {
+                    description: '',
+                    dishName: '',
+                    dishType: '',
+                    establishmentId: '',
+                    image: null,
+                    rating: {
+                        presentation: 0,
+                        price: 0,
+                        quantity: 0,
+                        taste: 0,
+                        description: ''
+                    },
+                },
+            })
+        })
     }
 
     private async getEstablishments() {
@@ -75,6 +95,36 @@ class Publication extends React.Component<Props, States> {
             })
     }
 
+    private async addPublication(publication: any) {
+        await addPublicationAPI(publication)
+            .then((response) => response.json())
+            .then((result) => {
+                if (result.id) {
+                    this.setState({
+                        publication: {
+                            description: '',
+                            dishName: '',
+                            dishType: '',
+                            establishmentId: '',
+                            image: null,
+                            rating: {
+                                presentation: 0,
+                                price: 0,
+                                quantity: 0,
+                                taste: 0,
+                                description: ''
+                            },
+                        }
+                    });
+                    this.props.navigation.navigate('Publication-list')
+                }
+            })
+            .catch((error) => {
+                console.error('Error:', JSON.stringify(error));
+            });
+
+    }
+
     render() {
 
         const navigation = this.props;
@@ -82,7 +132,6 @@ class Publication extends React.Component<Props, States> {
         const pickImage = async () => {
             let result = await ImagePicker.launchImageLibraryAsync({
                 mediaTypes: ImagePicker.MediaTypeOptions.All,
-                aspect: [4, 3],
                 quality: 1
             });
             if (!result.cancelled) {
@@ -109,50 +158,67 @@ class Publication extends React.Component<Props, States> {
 
         return (
             <ScrollView keyboardShouldPersistTaps={"always"}>
-                <Button title="Picture of the dish" onPress={pickImage}/>
+                <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'center', margin: 20}} >
+
+                    <Button type="solid" color='#2c7a7b' onPress={pickImage}>
+                        <Icon style={{marginRight: 10}} name="add-circle-outline" color="white" />
+                        Dish picture
+                    </Button>
+
+                </View>
+
                 {
                     this.state.publication.image &&
-                    <Image source={{uri: this.state.publication.image}} style={{width: 200, height: 200}}/>
+                    <View style={styles.dishImageContainer}>
+                        <Image source={{uri: this.state.publication.image}} style={styles.dishImage}/>
+                    </View>
                 }
-                <TextInput
-                    label="Dish name"
-                    value={this.state.publication.dishName}
-                    onChangeText={(v) => {
-                        this.setState({
-                            publication: {
-                                ...this.state.publication,
-                                dishName: v
-                            }
-                        })
-                    }}
-                    style={{margin: 16}}
-                />
-                <TextInput
-                    label="Type (Italian, vegan, Chinese, ...)"
-                    value={this.state.publication.description}
-                    onChangeText={(v) => {
-                        this.setState({
-                            publication: {
-                                ...this.state.publication,
-                                description: v
-                            }
-                        })
-                    }}
-                    style={{margin: 16}}
-                />
-                <TextInput
-                    label="Description"
-                    value={this.state.publication.dishType}
-                    onChangeText={(v) => {
-                        this.setState({
-                            publication: {
-                                ...this.state.publication,
-                                dishType: v
-                            }
-                        })
-                    }}
-                    style={{margin: 16}}
-                />
+                <View style={styles.inputTextContainer}>
+                    <Text style={styles.inputTextLabel}>Dish name</Text>
+                    <TextInput
+                        style={styles.inputText}
+                        value={this.state.publication.dishName}
+                        returnKeyLabel={'Dish name'}
+                        onChangeText={(v) => {
+                            this.setState({
+                                publication: {
+                                    ...this.state.publication,
+                                    dishName: v
+                                }
+                            })
+                        }}
+                    />
+                </View>
+                <View style={styles.inputTextContainer}>
+                    <Text style={styles.inputTextLabel}>Description</Text>
+                    <TextInput
+                        style={styles.inputText}
+                        value={this.state.publication.description}
+                        onChangeText={(v) => {
+                            this.setState({
+                                publication: {
+                                    ...this.state.publication,
+                                    description: v
+                                }
+                            })
+                        }}
+                    />
+                </View>
+                <View style={styles.inputTextContainer}>
+                    <Text style={styles.inputTextLabel}>Type (Italian, vegan, Chinese, ...)</Text>
+                    <TextInput
+                        style={styles.inputText}
+                        value={this.state.publication.dishType}
+                        onChangeText={(v) => {
+                            this.setState({
+                                publication: {
+                                    ...this.state.publication,
+                                    dishType: v
+                                }
+                            })
+                        }}
+                    />
+                </View>
                 <Divider style={{marginBottom: 10}}/>
                 <Button
                     title='Select establishment'
@@ -165,17 +231,17 @@ class Publication extends React.Component<Props, States> {
                     }}
                 />
                 {this.state.currentEstablishment &&
-                    <Card>
-                        <Card.Title>{this.state.currentEstablishment.name}</Card.Title>
+                    <Card containerStyle={{backgroundColor: '#004075', borderRadius: 10}}>
+                        <Card.Title style={{color: 'white'}}>{this.state.currentEstablishment.name}</Card.Title>
                         <Card.Divider/>
                         <View style={{display: 'flex', alignItems: 'center'}}>
                             <Card.Image
                                 style={{padding: 0, width: 200}}
                                 source={{
-                                    uri: ENV_API_URL + '/' + this.state.currentEstablishment.image.path,
+                                    uri: REACT_APP_API_URL + '/' + this.state.currentEstablishment.image.path,
                                 }}
                             />
-                            <Text style={{marginBottom: 10}}>
+                            <Text style={{margin: 10, color: 'white'}}>
                                 {this.state.currentEstablishment.description}
                             </Text>
                         </View>
@@ -208,7 +274,7 @@ class Publication extends React.Component<Props, States> {
                                         })
                                     }}
                                     maximumValue={10}
-                                    minimumValue={0}
+                                    minimumValue={1}
                                     step={1}
                                     allowTouchTrack
                                     trackStyle={{height: 5, backgroundColor: 'transparent'}}
@@ -248,7 +314,7 @@ class Publication extends React.Component<Props, States> {
                                         })
                                     }}
                                     maximumValue={10}
-                                    minimumValue={0}
+                                    minimumValue={1}
                                     step={1}
                                     allowTouchTrack
                                     trackStyle={{height: 5, backgroundColor: 'transparent'}}
@@ -288,7 +354,7 @@ class Publication extends React.Component<Props, States> {
                                         })
                                     }}
                                     maximumValue={10}
-                                    minimumValue={0}
+                                    minimumValue={1}
                                     step={1}
                                     allowTouchTrack
                                     trackStyle={{height: 5, backgroundColor: 'transparent'}}
@@ -328,7 +394,7 @@ class Publication extends React.Component<Props, States> {
                                         })
                                     }}
                                     maximumValue={10}
-                                    minimumValue={0}
+                                    minimumValue={1}
                                     step={1}
                                     allowTouchTrack
                                     trackStyle={{height: 5, backgroundColor: 'transparent'}}
@@ -435,13 +501,13 @@ class Publication extends React.Component<Props, States> {
                         <View style={styles.modalView}>
                             <Card>
                                 <Card.Title>{this.state.publication.dishName}</Card.Title>
-                                <Card.Divider style={{marginBottom: 10}} />
+                                <Card.Divider style={{marginBottom: 10}}/>
                                 <Card.Image
                                     source={{uri: this.state.publication.image}}
                                 />
                                 <Text>{this.state.publication.dishType}</Text>
                                 <Text>{this.state.publication.description}</Text>
-                                <Card.Divider style={{marginBottom: 10}} />
+                                <Card.Divider style={{marginBottom: 10}}/>
                                 <Card>
                                     {
                                         this.state.currentEstablishment &&
@@ -449,25 +515,25 @@ class Publication extends React.Component<Props, States> {
                                             <Image
                                                 style={{padding: 0, width: 50}}
                                                 source={{
-                                                    uri: ENV_API_URL + '/' + this.state.currentEstablishment.image.path,
+                                                    uri: REACT_APP_API_URL + '/' + this.state.currentEstablishment.image.path,
                                                 }}
                                             />
                                             <Text>{this.state.currentEstablishment.name}</Text>
                                         </View>
                                     }
                                 </Card>
-                                <Card.Divider style={{marginBottom: 10, marginTop: 10}} />
+                                <Card.Divider style={{marginBottom: 10, marginTop: 10}}/>
                                 <View>
                                     <Text>Taste: </Text>
                                     <Slider
                                         value={this.state.publication.rating.taste}
                                         disabled={true}
                                         maximumValue={10}
-                                        minimumValue={0}
+                                        minimumValue={1}
                                         step={1}
                                         allowTouchTrack
-                                        trackStyle={{ height: 5, backgroundColor: 'transparent' }}
-                                        thumbStyle={{ height: 20, width: 20, backgroundColor: 'transparent' }}
+                                        trackStyle={{height: 5, backgroundColor: 'transparent'}}
+                                        thumbStyle={{height: 20, width: 20, backgroundColor: 'transparent'}}
 
                                     />
                                 </View>
@@ -477,11 +543,11 @@ class Publication extends React.Component<Props, States> {
                                         value={this.state.publication.rating.presentation}
                                         disabled={true}
                                         maximumValue={10}
-                                        minimumValue={0}
+                                        minimumValue={1}
                                         step={1}
                                         allowTouchTrack
-                                        trackStyle={{ height: 5, backgroundColor: 'transparent' }}
-                                        thumbStyle={{ height: 20, width: 20, backgroundColor: 'transparent' }}
+                                        trackStyle={{height: 5, backgroundColor: 'transparent'}}
+                                        thumbStyle={{height: 20, width: 20, backgroundColor: 'transparent'}}
 
                                     />
                                 </View>
@@ -491,11 +557,11 @@ class Publication extends React.Component<Props, States> {
                                         value={this.state.publication.rating.quantity}
                                         disabled={true}
                                         maximumValue={10}
-                                        minimumValue={0}
+                                        minimumValue={1}
                                         step={1}
                                         allowTouchTrack
-                                        trackStyle={{ height: 5, backgroundColor: 'transparent' }}
-                                        thumbStyle={{ height: 20, width: 20, backgroundColor: 'transparent' }}
+                                        trackStyle={{height: 5, backgroundColor: 'transparent'}}
+                                        thumbStyle={{height: 20, width: 20, backgroundColor: 'transparent'}}
 
                                     />
                                 </View>
@@ -505,11 +571,11 @@ class Publication extends React.Component<Props, States> {
                                         value={this.state.publication.rating.price}
                                         disabled={true}
                                         maximumValue={10}
-                                        minimumValue={0}
+                                        minimumValue={1}
                                         step={1}
                                         allowTouchTrack
-                                        trackStyle={{ height: 5, backgroundColor: 'transparent' }}
-                                        thumbStyle={{ height: 20, width: 20, backgroundColor: 'transparent' }}
+                                        trackStyle={{height: 5, backgroundColor: 'transparent'}}
+                                        thumbStyle={{height: 20, width: 20, backgroundColor: 'transparent'}}
 
                                     />
                                 </View>
@@ -518,7 +584,7 @@ class Publication extends React.Component<Props, States> {
                                     style={styles.button}
                                     status='success'
                                     onPress={() => {
-                                        console.log(this.state.publication)
+                                        this.addPublication(this.state.publication);
                                         this.setState({
                                             modalResume: false
                                         })
@@ -561,7 +627,7 @@ const styles = StyleSheet.create({
     button: {
         borderRadius: 20,
         padding: 10,
-        elevation: 2
+        elevation: 2,
     },
     buttonOpen: {
         backgroundColor: "#F194FF",
@@ -577,6 +643,31 @@ const styles = StyleSheet.create({
     modalText: {
         marginBottom: 15,
         textAlign: "center"
+    },
+    inputText: {
+        marginLeft: 16,
+        marginRight: 16,
+        color: '#ffffff',
+        borderColor: 'white',
+        borderWidth: 1,
+        borderRadius: 10,
+        padding: 5,
+        paddingLeft: 10
+    },
+    inputTextContainer: {
+        marginTop: 16
+    },
+    inputTextLabel: {
+        color: '#ffffff',
+        marginLeft: 16,
+        marginBottom: 5
+    },
+    dishImageContainer: {
+        margin: 10,
+    },
+    dishImage: {
+        aspectRatio: 3 / 2,
+        borderRadius: 30
     }
 });
 

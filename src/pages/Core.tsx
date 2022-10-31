@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createBottomTabNavigator} from "@react-navigation/bottom-tabs";
-import {Button, StyleSheet} from "react-native";
+import {Button, StyleSheet, Text, View} from "react-native";
 import Home from "./Home";
 import Publication from "./Publication";
 import Establishment from "./establishment/Establishment";
@@ -42,7 +42,7 @@ class Core extends React.Component<Props, States> {
     render() {
         return (
             <NavigationContainer>
-                <Tab.Navigator
+                <Tab.Navigator sceneContainerStyle={{backgroundColor: '#013a69'}}
                     screenOptions={({route}) => ({
                         tabBarIcon: ({focused, color, size}) => {
                             let iconName;
@@ -51,7 +51,7 @@ class Core extends React.Component<Props, States> {
                                     iconName = focused
                                         ? 'home'
                                         : 'home-outline';
-                                    return <Icon name={iconName} type='ionicon' color='#000000'/>
+                                    return <Icon name={iconName} type='ionicon' color='#ffffff'/>
                                 case 'Publication':
                                     iconName = focused
                                         ? 'add-circle'
@@ -61,27 +61,34 @@ class Core extends React.Component<Props, States> {
                                     iconName = focused
                                         ? 'list'
                                         : 'list-outline';
-                                    return <Icon name={iconName} type='ionicon' color='#000000'/>
+                                    return <Icon name={iconName} type='ionicon' color='#ffffff'/>
                                 case 'Establishment':
                                     iconName = focused
                                         ? 'restaurant'
                                         : 'restaurant-outline';
-                                    return <Icon name={iconName} type='ionicon' color='#000000'/>
+                                    return <Icon name={iconName} type='ionicon' color='#ffffff'/>
                                 case 'Profile':
                                     iconName = focused
                                         ? 'person'
                                         : 'person-outline';
-                                    return <Icon name={iconName} type='ionicon' color='#000000'/>
+                                    return <Icon name={iconName} type='ionicon' color='#ffffff'/>
                             }
 
                         },
                         tabBarShowLabel: true,
                         tabBarActiveTintColor: '#ffffff',
-                        tabBarInactiveTintColor: '#000000',
+                        tabBarInactiveTintColor: '#ffffff',
                         tabBarLabelStyle: styles.navBarLabel,
                         tabBarStyle: styles.navBar,
                         headerStyle: styles.headerBar,
-                        headerShadowVisible: true
+                        headerShadowVisible: true,
+                        header: () => {
+                            return (
+                                <View style={styles.headerContainer}>
+                                    <Text style={styles.headerContainer.headerTitle}>Hello world</Text>
+                                </View>
+                            )
+                        }
                     })}
                 >
                     <Tab.Screen name="Home" component={Home}/>
@@ -108,18 +115,30 @@ const styles = StyleSheet.create({
     },
     navBar: {
         height: 75,
-        backgroundColor: '#8bacff',
+        backgroundColor: '#01223d',
     },
     navBarLabel: {
         fontSize: 14,
         paddingBottom: 10
     },
     headerBar: {
-        backgroundColor: '#8bacff',
+        backgroundColor: '#01001c',
     },
     addPublicationIcon: {
         color: '#ffffff',
     },
+    headerContainer: {
+        height: 80,
+        backgroundColor: '#01223d',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        headerTitle: {
+            color: 'white',
+            marginTop: 20
+        }
+    },
+
 });
 
 export default (Core);
