@@ -1,65 +1,38 @@
 import * as React from "react";
 import {Button, RefreshControl, ScrollView, StyleSheet, View} from "react-native";
-import {getCountriesFromApi} from "../../services/Country.service";
-import {getEstablishmentsAPI} from "../../services/Establishment.service";
-import CreateEstablishment from "./Create-establishment";
+import {getEstablishmentsAPI} from "../../../services/Establishment.service";
 import {Avatar, ListItem} from "@react-native-material/core";
 import {REACT_APP_API_URL} from "@env";
 
 interface Props {
     navigation: any,
-    route: any
+    route: any,
 }
 
 interface States {
-    displayAddEstModal: boolean,
-    displaySelectCountryModal: boolean,
-    countriesList: any[];
+    loading: boolean;
+    refreshing: boolean;
     establishmentList: any[];
-    establishment: {
-        name: string,
-        description: string,
-        image: string,
-        address: string,
-        country: string
-    }
-    selectedCountryLabel: string,
-    loading: boolean,
-    refreshing: boolean
 }
 
-class Establishment extends React.Component<Props, States> {
+class EstablishmentList extends React.Component<Props, States> {
     constructor(props: Props) {
         super(props);
         this.state = {
-            displayAddEstModal: false,
-            displaySelectCountryModal: false,
-            countriesList: [],
-            establishmentList: [],
-            selectedCountryLabel: '',
-            establishment: {
-                name: '',
-                description: '',
-                image: '',
-                address: '',
-                country: ''
-            },
             loading: false,
-            refreshing: false
+            refreshing: false,
+            establishmentList: []
         }
 
-        this.getCountries();
         this.getEstablishments();
-    }
 
-    private async getCountries() {
-        return getCountriesFromApi()
-            .then(res => res.json())
-            .then(json => {
-                this.setState({
-                    countriesList: json
-                })
+        this.props.navigation.addListener('focus', () => {
+            this.setState({
+                refreshing: true
+            }, () => {
+                this.getEstablishments();
             })
+        })
     }
 
     private async getEstablishments() {
@@ -74,8 +47,6 @@ class Establishment extends React.Component<Props, States> {
     }
 
     render() {
-
-        const { create } = this.props.route.params;
 
         let estList = (
             <ScrollView
@@ -108,29 +79,18 @@ class Establishment extends React.Component<Props, States> {
 
         return (
             <View style={styles.container}>
-                {
-                    !create ?
-                        <View style={styles.container}>
-                            <Button title='Add new establishment' onPress={() => {
-                                this.props.navigation.navigate('Establishment', {create: true})
-                            }}
-                            />
-                            {estList}
-                        </View> :
-                        <CreateEstablishment backToList={() => {
-                            this.props.navigation.setParams({create: false})
-                            this.setState({
-                                refreshing: true,
-                                displayAddEstModal: false
-                            });
-                            this.getEstablishments();
-                        }}/>
-                }
+                <View style={styles.container}>
+                    <Button title='Add new establishment' onPress={() => {
+                        this.props.navigation.push('EstablishmentCreate')
+                        //this.props.navigation.navigate('Establishment', {create: true})
+                    }}
+                    />
+                    {estList}
+                </View>
             </View>
         )
     }
 }
-
 
 const styles = StyleSheet.create({
     container: {
@@ -206,4 +166,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default (Establishment);
+export default (EstablishmentList);

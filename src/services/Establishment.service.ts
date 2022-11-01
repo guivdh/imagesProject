@@ -18,7 +18,7 @@ export const addEstablishmentAPI = async (establishment: any) => {
         name: 'photo.jpg',
         type: 'image/png'
     });
-    //Object.assign(body, establishment);
+    //Object.assign(body, Establishment);
     body.append('name', establishment.name);
     body.append('description', establishment.description);
     body.append('street', establishment.street);

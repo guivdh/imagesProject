@@ -2,13 +2,14 @@ import * as React from "react";
 import {Button, Image, Modal, ScrollView, StyleSheet, Text, View} from "react-native";
 import {Divider, ListItem} from "@react-native-material/core";
 import {Button as KittenButton, Input} from "@ui-kitten/components";
-import {getCountriesFromApi} from "../../services/Country.service";
-import {addEstablishmentAPI} from "../../services/Establishment.service";
+import {getCountriesFromApi} from "../../../services/Country.service";
+import {addEstablishmentAPI} from "../../../services/Establishment.service";
 import * as ImagePicker from "expo-image-picker";
 import {Icon} from '@rneui/themed';
 
 interface Props {
-    backToList(): void
+    navigation: any,
+    route: any,
 }
 
 interface States {
@@ -27,7 +28,7 @@ interface States {
     selectedCountryLabel: string
 }
 
-class CreateEstablishment extends React.Component<Props, States> {
+class EstablishmentCreate extends React.Component<Props, States> {
     constructor(props: Props) {
         super(props);
         this.state = {
@@ -64,7 +65,7 @@ class CreateEstablishment extends React.Component<Props, States> {
             .then((response) => response.json())
             .then((result) => {
                 if (result.id) {
-                    this.props.backToList();
+                    //this.props.backToList();
                     this.setState({
                         establishment: {
                             country: '',
@@ -162,6 +163,7 @@ class CreateEstablishment extends React.Component<Props, States> {
                     <Input size='small' disabled value={this.state.selectedCountryLabel} label="Country" style={{margin: 5}}/>
                     <KittenButton style={styles.button} size='small' onPress={() => {
                         this.setState({displaySelectCountryModal: true});
+                        this.getCountries();
                     }}>Select a country</KittenButton>
 
                     <Divider style={{margin: 10}}/>
@@ -170,7 +172,7 @@ class CreateEstablishment extends React.Component<Props, States> {
                         SAVE
                     </KittenButton>
                     <KittenButton style={styles.button} status='danger' onPress={() => {
-                        this.props.backToList();
+                        this.props.navigation.goBack();
                         this.setState({
                             establishment: {
                                 country: '',
@@ -292,4 +294,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default (CreateEstablishment);
+export default (EstablishmentCreate);

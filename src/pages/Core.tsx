@@ -1,13 +1,13 @@
 import * as React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createBottomTabNavigator} from "@react-navigation/bottom-tabs";
-import {Button, StyleSheet, Text, View} from "react-native";
-import Home from "./Home";
-import Publication from "./Publication";
-import Establishment from "./establishment/Establishment";
-import Profile from "./Profile";
-import PublicationList from "./Publication-list";
+import {Button, StyleSheet} from "react-native";
 import {Icon} from '@rneui/themed';
+import Home from "./Home/Home";
+import Establishment from "./Establishment/Establishment";
+import Profile from "./Profile/Profile";
+import Publication from "./Publication/Publication";
+import CreatePublication from "./CreatePublication/CreatePublication";
 
 interface Props {
     name: string;
@@ -42,8 +42,10 @@ class Core extends React.Component<Props, States> {
     render() {
         return (
             <NavigationContainer>
-                <Tab.Navigator sceneContainerStyle={{backgroundColor: '#013a69'}}
+                <Tab.Navigator
+                    sceneContainerStyle={styles.sceneContainer}
                     screenOptions={({route}) => ({
+                        headerShown: false,
                         tabBarIcon: ({focused, color, size}) => {
                             let iconName;
                             switch (route.name) {
@@ -52,12 +54,12 @@ class Core extends React.Component<Props, States> {
                                         ? 'home'
                                         : 'home-outline';
                                     return <Icon name={iconName} type='ionicon' color='#ffffff'/>
-                                case 'Publication':
+                                case 'Post':
                                     iconName = focused
                                         ? 'add-circle'
                                         : 'add-circle-outline';
                                     return <Icon size={50} iconStyle={styles.addPublicationIcon} name={iconName} type='ionicon'/>
-                                case 'Publication-list':
+                                case 'Publications':
                                     iconName = focused
                                         ? 'list'
                                         : 'list-outline';
@@ -80,21 +82,12 @@ class Core extends React.Component<Props, States> {
                         tabBarInactiveTintColor: '#ffffff',
                         tabBarLabelStyle: styles.navBarLabel,
                         tabBarStyle: styles.navBar,
-                        headerStyle: styles.headerBar,
-                        headerShadowVisible: true,
-                        header: () => {
-                            return (
-                                <View style={styles.headerContainer}>
-                                    <Text style={styles.headerContainer.headerTitle}>Hello world</Text>
-                                </View>
-                            )
-                        }
                     })}
                 >
                     <Tab.Screen name="Home" component={Home}/>
-                    <Tab.Screen name="Publication-list" component={PublicationList}/>
-                    <Tab.Screen name="Publication" component={Publication}/>
-                    <Tab.Screen name="Establishment" component={(Establishment)} initialParams={{create: false}}/>
+                    <Tab.Screen name="Publications" component={Publication}/>
+                    <Tab.Screen name="Post" component={CreatePublication} />
+                    <Tab.Screen name="Establishment" component={(Establishment)}/>
                     <Tab.Screen name="Profile" component={Profile} />
                 </Tab.Navigator>
             </NavigationContainer>
@@ -138,7 +131,9 @@ const styles = StyleSheet.create({
             marginTop: 20
         }
     },
-
+    sceneContainer: {
+        backgroundColor: '#e9eaed'
+    }
 });
 
 export default (Core);

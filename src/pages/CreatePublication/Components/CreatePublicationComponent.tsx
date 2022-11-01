@@ -1,14 +1,14 @@
 import * as React from "react";
-import {ActivityIndicator, Image, Modal, ScrollView, StyleSheet, Text, TextInput, View} from "react-native";
-import {getEstablishmentByIdAPI, getLightEstablishmentsAPI} from "../services/Establishment.service";
-import {Divider} from "@react-native-material/core";
+import {ActivityIndicator, Image, Modal, ScrollView, StyleSheet, Text, View} from "react-native";
+import {Divider, TextInput} from "@react-native-material/core";
 import * as ImagePicker from "expo-image-picker";
 import {Button, Icon, Slider} from "@rneui/base";
 import {AutocompleteDropdown} from "react-native-autocomplete-dropdown";
 import {Card} from "@rneui/themed";
 import {REACT_APP_API_URL} from "@env";
-import {Button as KittenButton, Input, Layout, Tab, TabView} from "@ui-kitten/components";
-import {addPublicationAPI} from "../services/Publication.service";
+import {Button as KittenButton, Tab, TabView} from "@ui-kitten/components";
+import {addPublicationAPI} from "../../../services/Publication.service";
+import {getEstablishmentByIdAPI, getLightEstablishmentsAPI} from "../../../services/Establishment.service";
 
 interface Props {
     navigation: any,
@@ -38,7 +38,7 @@ interface States {
     currentTabRating: number
 }
 
-class Publication extends React.Component<Props, States> {
+class CreatePublicationComponent extends React.Component<Props, States> {
     constructor(props: Props) {
         super(props);
         this.state = {
@@ -114,9 +114,11 @@ class Publication extends React.Component<Props, States> {
                                 taste: 0,
                                 description: ''
                             },
-                        }
+                        },
+                        currentTabRating: 0,
+                        currentEstablishment: null
                     });
-                    this.props.navigation.navigate('Publication-list')
+                    this.props.navigation.navigate('Publications')
                 }
             })
             .catch((error) => {
@@ -126,8 +128,6 @@ class Publication extends React.Component<Props, States> {
     }
 
     render() {
-
-        const navigation = this.props;
 
         const pickImage = async () => {
             let result = await ImagePicker.launchImageLibraryAsync({
@@ -158,13 +158,11 @@ class Publication extends React.Component<Props, States> {
 
         return (
             <ScrollView keyboardShouldPersistTaps={"always"}>
-                <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'center', margin: 20}} >
-
-                    <Button type="solid" color='#2c7a7b' onPress={pickImage}>
-                        <Icon style={{marginRight: 10}} name="add-circle-outline" color="white" />
+                <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'center', margin: 20}}>
+                    <Button type="solid" color='#01223d' onPress={pickImage} buttonStyle={{borderRadius: 20}}>
+                        <Icon style={{marginRight: 10}} name="add-circle-outline" color="white"/>
                         Dish picture
                     </Button>
-
                 </View>
 
                 {
@@ -173,66 +171,71 @@ class Publication extends React.Component<Props, States> {
                         <Image source={{uri: this.state.publication.image}} style={styles.dishImage}/>
                     </View>
                 }
-                <View style={styles.inputTextContainer}>
-                    <Text style={styles.inputTextLabel}>Dish name</Text>
-                    <TextInput
-                        style={styles.inputText}
-                        value={this.state.publication.dishName}
-                        returnKeyLabel={'Dish name'}
-                        onChangeText={(v) => {
-                            this.setState({
-                                publication: {
-                                    ...this.state.publication,
-                                    dishName: v
-                                }
-                            })
-                        }}
-                    />
-                </View>
-                <View style={styles.inputTextContainer}>
-                    <Text style={styles.inputTextLabel}>Description</Text>
-                    <TextInput
-                        style={styles.inputText}
-                        value={this.state.publication.description}
-                        onChangeText={(v) => {
-                            this.setState({
-                                publication: {
-                                    ...this.state.publication,
-                                    description: v
-                                }
-                            })
-                        }}
-                    />
-                </View>
-                <View style={styles.inputTextContainer}>
-                    <Text style={styles.inputTextLabel}>Type (Italian, vegan, Chinese, ...)</Text>
-                    <TextInput
-                        style={styles.inputText}
-                        value={this.state.publication.dishType}
-                        onChangeText={(v) => {
-                            this.setState({
-                                publication: {
-                                    ...this.state.publication,
-                                    dishType: v
-                                }
-                            })
-                        }}
-                    />
-                </View>
-                <Divider style={{marginBottom: 10}}/>
-                <Button
-                    title='Select establishment'
-                    onPress={() => {
-                        this.getEstablishments();
+                <TextInput
+                    label='Dish name'
+                    color='#01223d'
+                    style={styles.inputText}
+                    value={this.state.publication.dishName}
+                    returnKeyLabel={'Dish name'}
+                    onChangeText={(v) => {
                         this.setState({
-                            modalEstablishment: true,
-                            loading: true
+                            publication: {
+                                ...this.state.publication,
+                                dishName: v
+                            }
                         })
                     }}
                 />
+                <TextInput
+                    label='Description'
+                    color='#01223d'
+                    style={styles.inputText}
+                    value={this.state.publication.description}
+                    returnKeyLabel={'Dish name'}
+                    onChangeText={(v) => {
+                        this.setState({
+                            publication: {
+                                ...this.state.publication,
+                                description: v
+                            }
+                        })
+                    }}
+                />
+                <TextInput
+                    label='Type (Italian, vegan, Chinese, ...)'
+                    color='#01223d'
+                    style={styles.inputText}
+                    value={this.state.publication.dishType}
+                    returnKeyLabel={'Dish name'}
+                    onChangeText={(v) => {
+                        this.setState({
+                            publication: {
+                                ...this.state.publication,
+                                dishType: v
+                            }
+                        })
+                    }}
+                />
+                <Divider style={{marginBottom: 10}}/>
+                <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'center', margin: 20}}>
+                    <Button
+                        type="solid"
+                        color='#01223d'
+                        buttonStyle={{borderRadius: 20}}
+                        onPress={() => {
+                            this.getEstablishments();
+                            this.setState({
+                                modalEstablishment: true,
+                                loading: true
+                            })
+                        }}>
+                        <Icon style={{marginRight: 10}} name="add-circle-outline" color="white"/>
+                        Select establishment
+                    </Button>
+                </View>
                 {this.state.currentEstablishment &&
-                    <Card containerStyle={{backgroundColor: '#004075', borderRadius: 10}}>
-                        <Card.Title style={{color: 'white'}}>{this.state.currentEstablishment.name}</Card.Title>
+                    <Card containerStyle={{borderRadius: 10}}>
+                        <Card.Title>{this.state.currentEstablishment.name}</Card.Title>
                         <Card.Divider/>
                         <View style={{display: 'flex', alignItems: 'center'}}>
                             <Card.Image
@@ -241,20 +244,21 @@ class Publication extends React.Component<Props, States> {
                                     uri: REACT_APP_API_URL + '/' + this.state.currentEstablishment.image.path,
                                 }}
                             />
-                            <Text style={{margin: 10, color: 'white'}}>
+                            <Text style={{margin: 10}}>
                                 {this.state.currentEstablishment.description}
                             </Text>
                         </View>
                     </Card>
                 }
-                <View>
+                <View style={styles.ratingContainer}>
                     <TabView
                         selectedIndex={this.state.currentTabRating}
                         onSelect={index => this.setState({currentTabRating: index})}
                         tabBarStyle={{height: 50}}
-                        style={{marginTop: 10}}
+                        style={styles.ratingTabHeader}
+                        indicatorStyle={styles.ratingTabHeaderIndicator}
                     >
-                        <Tab title='Taste'>
+                        <Tab title={() => <Text style={styles.ratingTabHeaderIndicator.title}>Taste</Text>}>
                             <View style={{margin: 20}}>
                                 <View style={{display: 'flex', justifyContent: 'space-between', flexDirection: 'row', marginBottom: 15}}>
                                     <Text>Bad</Text>
@@ -282,8 +286,8 @@ class Publication extends React.Component<Props, States> {
                                     thumbProps={{
                                         children: (
                                             <Icon
-                                                name="heartbeat"
-                                                type="font-awesome"
+                                                name="fast-food"
+                                                type="ionicon"
                                                 size={20}
                                                 reverse
                                                 containerStyle={{bottom: 20, right: 20}}
@@ -294,7 +298,7 @@ class Publication extends React.Component<Props, States> {
                                 />
                             </View>
                         </Tab>
-                        <Tab title='Presentation'>
+                        <Tab title={() => <Text style={styles.ratingTabHeaderIndicator.title}>Presentation</Text>}>
                             <View style={{margin: 20}}>
                                 <View style={{display: 'flex', justifyContent: 'space-between', flexDirection: 'row', marginBottom: 15}}>
                                     <Text>Bad</Text>
@@ -322,8 +326,8 @@ class Publication extends React.Component<Props, States> {
                                     thumbProps={{
                                         children: (
                                             <Icon
-                                                name="heartbeat"
-                                                type="font-awesome"
+                                                name="silverware-fork-knife"
+                                                type="material-community"
                                                 size={20}
                                                 reverse
                                                 containerStyle={{bottom: 20, right: 20}}
@@ -334,7 +338,7 @@ class Publication extends React.Component<Props, States> {
                                 />
                             </View>
                         </Tab>
-                        <Tab title='Quantity'>
+                        <Tab title={() => <Text style={styles.ratingTabHeaderIndicator.title}>Quantity</Text>}>
                             <View style={{margin: 20}}>
                                 <View style={{display: 'flex', justifyContent: 'space-between', flexDirection: 'row', marginBottom: 15}}>
                                     <Text>Bad</Text>
@@ -362,8 +366,8 @@ class Publication extends React.Component<Props, States> {
                                     thumbProps={{
                                         children: (
                                             <Icon
-                                                name="heartbeat"
-                                                type="font-awesome"
+                                                name="resize"
+                                                type="ionicon"
                                                 size={20}
                                                 reverse
                                                 containerStyle={{bottom: 20, right: 20}}
@@ -374,7 +378,7 @@ class Publication extends React.Component<Props, States> {
                                 />
                             </View>
                         </Tab>
-                        <Tab title='Price'>
+                        <Tab title={() => <Text style={styles.ratingTabHeaderIndicator.title}>Price</Text>}>
                             <View style={{margin: 20}}>
                                 <View style={{display: 'flex', justifyContent: 'space-between', flexDirection: 'row', marginBottom: 15}}>
                                     <Text>Bad</Text>
@@ -402,7 +406,7 @@ class Publication extends React.Component<Props, States> {
                                     thumbProps={{
                                         children: (
                                             <Icon
-                                                name="heartbeat"
+                                                name="money"
                                                 type="font-awesome"
                                                 size={20}
                                                 reverse
@@ -416,13 +420,15 @@ class Publication extends React.Component<Props, States> {
                         </Tab>
                     </TabView>
                 </View>
-                <View>
-                    <Input
-                        multiline={true}
-                        textStyle={{minHeight: 64}}
-                        placeholder='Your rating'
-                        value={this.state.publication.rating.description}
-                        onChangeText={(v: string) => this.setState({
+                <TextInput
+                    label='Description'
+                    color='#01223d'
+                    multiline
+                    style={styles.inputText}
+                    value={this.state.publication.rating.description}
+                    returnKeyLabel={'Dish name'}
+                    onChangeText={(v) => {
+                        this.setState({
                             publication: {
                                 ...this.state.publication,
                                 rating: {
@@ -430,23 +436,25 @@ class Publication extends React.Component<Props, States> {
                                     description: v
                                 }
                             }
-                        })}
-                    />
-
-                </View>
-                <Divider style={{marginBottom: 10}}/>
-
-                <KittenButton
-                    style={styles.button}
-                    status='success'
-                    onPress={() => {
-                        this.setState({
-                            modalResume: true
                         })
                     }}
-                >
-                    Visualiser
-                </KittenButton>
+                />
+                <Divider style={{marginBottom: 10}}/>
+
+                <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'center', margin: 20}}>
+                    <Button
+                        type="solid"
+                        color="#00cc3d"
+                        buttonStyle={{borderRadius: 20}}
+                        onPress={() => {
+                            this.setState({
+                                modalResume: true,
+                            })
+                        }}>
+                        <Icon style={{marginRight: 10}} name="add-circle-outline" color="white"/>
+                        Validation
+                    </Button>
+                </View>
 
                 <Modal
                     animationType='fade'
@@ -487,6 +495,20 @@ class Publication extends React.Component<Props, States> {
                                         dataSet={this.state.establishmentList}
                                     />
                             }
+                            <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'center', margin: 20}}>
+
+                                <Button type="solid" color='#2c7a7b' onPress={() => {
+                                    this.setState({
+                                        modalEstablishment: false
+                                    })
+                                    this.props.navigation.push('CreateEstablishmentPublication')
+                                    //this.props.navigation.navigate('Establishment', {create: true, currentRoute: 'CreatePublication'})
+                                }}>
+                                    <Icon style={{marginRight: 10}} name="add-circle-outline" color="white"/>
+                                    Create one
+                                </Button>
+
+                            </View>
                         </View>
                     </View>
                 </Modal>
@@ -645,20 +667,13 @@ const styles = StyleSheet.create({
         textAlign: "center"
     },
     inputText: {
-        marginLeft: 16,
-        marginRight: 16,
-        color: '#ffffff',
-        borderColor: 'white',
-        borderWidth: 1,
-        borderRadius: 10,
-        padding: 5,
-        paddingLeft: 10
+        marginLeft: 10,
+        marginRight: 10,
     },
     inputTextContainer: {
         marginTop: 16
     },
     inputTextLabel: {
-        color: '#ffffff',
         marginLeft: 16,
         marginBottom: 5
     },
@@ -668,8 +683,26 @@ const styles = StyleSheet.create({
     dishImage: {
         aspectRatio: 3 / 2,
         borderRadius: 30
+    },
+    ratingContainer: {
+        margin: 10,
+        borderWidth: 1,
+        borderRadius: 10,
+        borderColor: 'lightgrey',
+        backgroundColor: 'white'
+    },
+    ratingTabHeader: {
+        borderTopLeftRadius: 10,
+        borderTopRightRadius: 10,
+        color: '#01223d'
+    },
+    ratingTabHeaderIndicator: {
+        backgroundColor: '#01223d',
+        title: {
+            color: '#01223d',
+        }
     }
 });
 
 
-export default (Publication);
+export default (CreatePublicationComponent);

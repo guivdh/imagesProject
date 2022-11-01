@@ -1,6 +1,6 @@
 import * as React from "react";
 import {RefreshControl, ScrollView, StyleSheet, TouchableOpacity, View} from "react-native";
-import {getPublicationsAPI} from "../services/Publication.service";
+import {getPublicationsAPI} from "../../../services/Publication.service";
 import {Image} from '@rneui/themed';
 import {REACT_APP_API_URL} from "@env";
 
@@ -23,7 +23,8 @@ class PublicationList extends React.Component<Props, States> {
         }
 
         this.getPublications();
-        this.props.navigation.addListener('tabPress', () => {
+
+        this.props.navigation.addListener('focus', () => {
             this.setState({
                 refreshing: true
             }, () => {
@@ -61,7 +62,9 @@ class PublicationList extends React.Component<Props, States> {
                         this.state.publications &&
                         this.state.publications.map((el, i) => {
                                 return (
-                                    <TouchableOpacity key={i} onPress={() => {console.log('press')}}>
+                                    <TouchableOpacity key={i} onPress={() => {
+                                        this.props.navigation.push('PublicationViewComponent', {pubId: el.id})
+                                    }}>
                                         <Image
                                             source={{uri: REACT_APP_API_URL + '/' + el.image.path}}
                                             style={styles.item}
