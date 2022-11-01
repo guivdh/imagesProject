@@ -2,6 +2,7 @@ import * as React from "react";
 import {createNativeStackNavigator} from "@react-navigation/native-stack";
 import PublicationList from "./Components/PublicationList";
 import PublicationView from "./Components/PublicationView";
+import {Text} from "react-native";
 
 interface Props {
 }

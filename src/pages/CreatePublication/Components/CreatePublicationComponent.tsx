@@ -65,7 +65,7 @@ class CreatePublicationComponent extends React.Component<Props, States> {
         }
 
         this.props.navigation.addListener('blur', () => {
-            this.setState({
+            /*this.setState({
                 publication: {
                     description: '',
                     dishName: '',
@@ -80,7 +80,7 @@ class CreatePublicationComponent extends React.Component<Props, States> {
                         description: ''
                     },
                 },
-            })
+            })*/
         })
     }
 
@@ -457,6 +457,9 @@ class CreatePublicationComponent extends React.Component<Props, States> {
                 </View>
 
                 <Modal
+                    onShow={() => {
+                        this.getEstablishments();
+                    }}
                     animationType='fade'
                     transparent={true}
                     visible={this.state.modalEstablishment}
