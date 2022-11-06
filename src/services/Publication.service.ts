@@ -4,6 +4,10 @@ export const getPublicationsAPI = async () => {
     return await fetch(REACT_APP_API_URL + '/publications');
 }
 
+export const getOnePublicationAPI = async (id: string) => {
+    return await fetch(REACT_APP_API_URL + '/publications/' + id);
+}
+
 export const addPublicationAPI = async (publication: any) => {
     let body = new FormData();
     body.append('publication', {

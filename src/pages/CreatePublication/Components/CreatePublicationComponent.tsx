@@ -132,7 +132,9 @@ class CreatePublicationComponent extends React.Component<Props, States> {
         const pickImage = async () => {
             let result = await ImagePicker.launchImageLibraryAsync({
                 mediaTypes: ImagePicker.MediaTypeOptions.All,
-                quality: 1
+                quality: 1,
+                allowsEditing:true,
+                aspect: [4, 3]
             });
             if (!result.cancelled) {
                 this.setState({
@@ -366,8 +368,8 @@ class CreatePublicationComponent extends React.Component<Props, States> {
                                     thumbProps={{
                                         children: (
                                             <Icon
-                                                name="resize"
-                                                type="ionicon"
+                                                name="weight"
+                                                type="font-awesome-5"
                                                 size={20}
                                                 reverse
                                                 containerStyle={{bottom: 20, right: 20}}

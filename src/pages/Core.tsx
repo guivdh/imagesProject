@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {NavigationContainer} from '@react-navigation/native';
+import {DefaultTheme, NavigationContainer} from '@react-navigation/native';
 import {createBottomTabNavigator} from "@react-navigation/bottom-tabs";
 import {Button, StyleSheet} from "react-native";
 import {Icon} from '@rneui/themed';
@@ -28,20 +28,18 @@ class Core extends React.Component<Props, States> {
         }
     }
 
-    myTabBar() {
-        return (
-            <Button
-                title="Go somewhere"
-                onPress={() => {
-
-                }}
-            />
-        );
-    }
-
     render() {
+
+        const MyTheme = {
+            ...DefaultTheme,
+            colors: {
+                ...DefaultTheme.colors,
+                background:'#dcdcdc'
+            },
+        };
+
         return (
-            <NavigationContainer>
+            <NavigationContainer theme={MyTheme}>
                 <Tab.Navigator
                     sceneContainerStyle={styles.sceneContainer}
                     screenOptions={({route}) => ({
@@ -108,7 +106,7 @@ const styles = StyleSheet.create({
     },
     navBar: {
         height: 75,
-        backgroundColor: '#01223d',
+        backgroundColor: '#344955',
     },
     navBarLabel: {
         fontSize: 14,
@@ -122,7 +120,7 @@ const styles = StyleSheet.create({
     },
     headerContainer: {
         height: 80,
-        backgroundColor: '#01223d',
+        backgroundColor: '#3d0101',
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
@@ -132,7 +130,7 @@ const styles = StyleSheet.create({
         }
     },
     sceneContainer: {
-        backgroundColor: '#e9eaed'
+        backgroundColor: '#5b5b5b'
     }
 });
 

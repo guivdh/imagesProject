@@ -91,10 +91,9 @@ const styles = StyleSheet.create({
     item: {
         aspectRatio: 1,
         flex: 1,
-        borderRadius: 30,
         width: 100,
         height: 100,
-        margin: 5
+        margin: 1
     },
 });
 
