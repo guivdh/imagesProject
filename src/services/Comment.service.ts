@@ -1,7 +1,7 @@
 import {REACT_APP_API_URL} from "@env";
 
 export const addCommentAPI = async (publicationId: string, comment: string) => {
-    return await fetch(REACT_APP_API_URL + '/likes/like', {
+    return await fetch(REACT_APP_API_URL + '/comments', {
         method: 'POST',
         headers: {
             Accept: 'application/json',
