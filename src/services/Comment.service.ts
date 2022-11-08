@@ -15,3 +15,7 @@ export const addCommentAPI = async (publicationId: string, comment: string) => {
         })
     });
 }
+
+export const getCommentsByPublicationAPI = async (publicationId: string) => {
+    return await fetch(REACT_APP_API_URL + '/comments/publication/' + publicationId);
+}

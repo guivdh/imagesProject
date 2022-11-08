@@ -1,12 +1,12 @@
 import * as React from "react";
-import {ActivityIndicator, Image, ScrollView, StyleSheet, Text, View} from "react-native";
+import {ActivityIndicator, Image, ScrollView, StyleSheet, Text, ToastAndroid, Vibration, View} from "react-native";
 import {getOnePublicationAPI} from "../../../services/Publication.service";
 import {REACT_APP_API_URL} from "@env";
 import {Divider, Icon, Slider} from "@rneui/base";
 import {Card} from "@rneui/themed";
 import {likeAPI} from "../../../services/Like.service";
-import {Snackbar, TextInput} from "@react-native-material/core";
-import {addCommentAPI} from "../../../services/Comment.service";
+import {TextInput} from "@react-native-material/core";
+import {addCommentAPI, getCommentsByPublicationAPI} from "../../../services/Comment.service";
 
 interface Props {
     navigation: any,
@@ -21,6 +21,7 @@ interface States {
     addCommentView: boolean;
     addCommentValue: string;
     commentCreated: boolean;
+    comments: any[];
 }
 
 class PublicationView extends React.Component<Props, States> {
@@ -33,17 +34,20 @@ class PublicationView extends React.Component<Props, States> {
             isLike: false,
             addCommentView: false,
             addCommentValue: '',
-            commentCreated: false
+            commentCreated: false,
+            comments: []
         }
 
         const {pubId} = this.props.route.params;
         this.getPublicationById(pubId);
+        this.getCommentsByPublicationId(pubId);
 
         this.props.navigation.addListener('focus', () => {
             this.setState({
                 loading: true
             }, () => {
                 this.getPublicationById(pubId);
+                this.getCommentsByPublicationId(pubId);
             })
         })
     }
@@ -56,6 +60,16 @@ class PublicationView extends React.Component<Props, States> {
                     currentPublication: json,
                     loading: false,
                     isLike: json.isLike
+                });
+            })
+    }
+
+    async getCommentsByPublicationId(publicationId: string) {
+        return getCommentsByPublicationAPI(publicationId)
+            .then(res => res.json())
+            .then(json => {
+                this.setState({
+                    comments: json
                 });
             })
     }
@@ -105,6 +119,10 @@ class PublicationView extends React.Component<Props, States> {
             )
         }
 
+        const commentCreatedSuccess = () => {
+            ToastAndroid.show("Comment successfully added", ToastAndroid.SHORT);
+        };
+
         return (
             <ScrollView>
                 {
@@ -128,6 +146,7 @@ class PublicationView extends React.Component<Props, States> {
                                     size={30}
                                     color={this.state.isLike ? 'red' : 'black'}
                                     onPress={() => {
+                                        Vibration.vibrate(10)
                                         likeAPI(pubId)
                                             .then((res) => res.json())
                                             .then(json => {
@@ -151,13 +170,20 @@ class PublicationView extends React.Component<Props, States> {
                                             type='font-awesome'
                                             size={20}
                                             onPress={() => {
-                                                console.log('send')
-                                                addCommentAPI(pubId, this.state.addCommentValue)
-                                                    .then((res) => res.json())
-                                                    .then(json => {
-                                                        this.setState({commentCreated: true})
-                                                        console.log(json)
-                                                    })
+                                                if (this.state.addCommentValue) {
+                                                    addCommentAPI(pubId, this.state.addCommentValue)
+                                                        .then((res) => res.json())
+                                                        .then(json => {
+                                                            this.setState({
+                                                                commentCreated: true,
+                                                                addCommentView: false,
+                                                                addCommentValue: ''
+                                                            }, () => {
+                                                                this.getCommentsByPublicationId(pubId);
+                                                                commentCreatedSuccess();
+                                                            })
+                                                        });
+                                                }
                                             }}
                                         />
                                     )}
@@ -165,6 +191,16 @@ class PublicationView extends React.Component<Props, States> {
                                     variant="outlined"
                                     label="Comment"
                                     style={{margin: 16}}/>
+                            </View>
+                            <View>
+                                {
+                                    this.state.comments.map((comment, i) => (
+                                        <View key={i} style={{display: 'flex', flexDirection: 'row', marginLeft: 5}}>
+                                            <Text style={{fontWeight: 'bold'}}>{comment.user.pseudo}</Text>
+                                            <Text> : {comment.comment}</Text>
+                                        </View>
+                                    ))
+                                }
                             </View>
                         </View>
                         <View>
