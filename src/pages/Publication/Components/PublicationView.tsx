@@ -5,7 +5,7 @@ import {REACT_APP_API_URL} from "@env";
 import {Divider, Icon, Slider} from "@rneui/base";
 import {Card} from "@rneui/themed";
 import {likeAPI} from "../../../services/Like.service";
-import {TextInput} from "@react-native-material/core";
+import {Snackbar, TextInput} from "@react-native-material/core";
 import {addCommentAPI} from "../../../services/Comment.service";
 
 interface Props {
@@ -20,6 +20,7 @@ interface States {
     isLike: boolean;
     addCommentView: boolean;
     addCommentValue: string;
+    commentCreated: boolean;
 }
 
 class PublicationView extends React.Component<Props, States> {
@@ -31,7 +32,8 @@ class PublicationView extends React.Component<Props, States> {
             showRate: false,
             isLike: false,
             addCommentView: false,
-            addCommentValue: ''
+            addCommentValue: '',
+            commentCreated: false
         }
 
         const {pubId} = this.props.route.params;
@@ -153,6 +155,7 @@ class PublicationView extends React.Component<Props, States> {
                                                 addCommentAPI(pubId, this.state.addCommentValue)
                                                     .then((res) => res.json())
                                                     .then(json => {
+                                                        this.setState({commentCreated: true})
                                                         console.log(json)
                                                     })
                                             }}
