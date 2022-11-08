@@ -66,7 +66,7 @@ class PublicationList extends React.Component<Props, States> {
                                         this.props.navigation.push('PublicationViewComponent', {pubId: el.id})
                                     }}>
                                         <Image
-                                            source={{uri: REACT_APP_API_URL + '/' + el.image.path}}
+                                            source={{uri: REACT_APP_API_URL + '/' + el.path}}
                                             style={styles.item}
                                         />
                                     </TouchableOpacity>

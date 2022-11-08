@@ -65,12 +65,18 @@ class EstablishmentList extends React.Component<Props, States> {
                 {
                     this.state.establishmentList.map((el, i) => {
                         return (
-                            <ListItem key={i} title={el.name} leading={
-                                <Avatar
-                                    image={{uri: REACT_APP_API_URL + '/' + el.image.path}}
-                                    size={32}
-                                />
-                            }/>
+                            <ListItem
+                                key={i}
+                                title={el.name}
+                                onPress={() => {
+                                    this.props.navigation.push('EstablishmentView', {establishmentId: el.id})
+                                }}
+                                leading={
+                                    <Avatar
+                                        image={{uri: REACT_APP_API_URL + '/' + el.image.path}}
+                                        size={32}
+                                    />
+                                }/>
                         )
                     })
                 }
